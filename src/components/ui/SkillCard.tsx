@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import * as SiIcons from "react-icons/si";
-import * as FaIcons from "react-icons/fa";
+import { IconMap } from "./IconMap";
 
 interface SkillCardProps {
   skill: {
@@ -14,9 +13,9 @@ interface SkillCardProps {
 }
 
 export function SkillCard({ skill, isAr }: SkillCardProps) {
-  // Dynamically load the icon from Si or Fa
-  let Icon = (SiIcons as any)[skill.icon] || (FaIcons as any)[skill.icon];
-  if (!Icon) Icon = FaIcons.FaCode; // Fallback icon
+  // Dynamically load the icon from IconMap
+  let Icon = IconMap[skill.icon];
+  if (!Icon) Icon = IconMap.FaCode; // Fallback icon
 
   return (
     <motion.div

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { content } from "./data/content";
 import { useScrollSequence } from "./hooks/useScrollSequence";
 import { BackgroundCanvas } from "./components/ui/BackgroundCanvas";
@@ -6,8 +6,8 @@ import { Starfield } from "./components/ui/Starfield";
 import { HeroSection } from "./components/sections/HeroSection";
 import { ArchitectSection } from "./components/sections/ArchitectSection";
 import { VisionSection } from "./components/sections/VisionSection";
-import { SkillsSection } from "./components/sections/SkillsSection";
-import { ProjectsSection } from "./components/sections/ProjectsSection";
+const SkillsSection = React.lazy(() => import("./components/sections/SkillsSection").then(m => ({ default: m.SkillsSection })));
+const ProjectsSection = React.lazy(() => import("./components/sections/ProjectsSection").then(m => ({ default: m.ProjectsSection })));
 import { Preloader } from "./components/ui/Preloader";
 
 export default function App() {
@@ -95,7 +95,34 @@ export default function App() {
             className="absolute inset-0 w-full h-full"
             style={{ transform: "rotateY(90deg) translateZ(50vw)", backfaceVisibility: "hidden" }}
           >
-            <SkillsSection t={t} isAr={isAr} />
+            {/* Interactive Skills Section (Warp Target) */}
+            <div 
+              className="w-full transition-opacity duration-700 ease-in-out"
+              style={{
+                opacity: activeSection >= 3 ? 1 : 0,
+                pointerEvents: activeSection >= 3 ? 'auto' : 'none',
+                display: activeSection >= 3 ? 'block' : 'none'
+              }}
+            >
+              <Suspense fallback={<div className="w-full h-screen" />}>
+                <SkillsSection t={t} isAr={isAr} />
+              </Suspense>
+            </div>
+
+            {/* Projects Section (Appears after Warp) */}
+            <div 
+              className="w-full transition-all duration-1000 ease-in-out"
+              style={{
+                transform: 'var(--projects-transform, translateY(100vh))',
+                opacity: 'var(--projects-opacity, 0)',
+                visibility: 'var(--projects-visibility, hidden)' as any,
+                pointerEvents: activeSection === 4 ? 'auto' : 'none',
+              }}
+            >
+              <Suspense fallback={<div className="w-full min-h-screen" />}>
+                <ProjectsSection t={t} isAr={isAr} />
+              </Suspense>
+            </div>
           </div>
 
         </div>

@@ -31,15 +31,31 @@ export function Preloader({ onComplete }: PreloaderProps) {
 
   useEffect(() => {
     const startTime = Date.now();
-    const duration = 2500; // 2.5s for loading progress
+    const MIN_DURATION = 2500; // Keep the cool boot sequence for at least 2.5s
+    
+    let isLoaded = document.readyState === "complete";
+    const handleLoad = () => { isLoaded = true; };
+    
+    if (!isLoaded) {
+      window.addEventListener("load", handleLoad);
+    }
     
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
-      const currentProgress = Math.min(100, Math.floor((elapsed / duration) * 100));
-      setProgress(currentProgress);
       
-      if (currentProgress >= 100) {
+      // Fake progress creeps up to 95% over the minimum duration
+      let currentProgress = Math.min(95, (elapsed / MIN_DURATION) * 95);
+      
+      // If the actual page and all images are fully loaded, and min duration has passed, jump to 100%
+      if (isLoaded && elapsed >= MIN_DURATION) {
+        currentProgress = 100;
+      }
+      
+      setProgress(Math.floor(currentProgress));
+      
+      if (currentProgress === 100) {
         clearInterval(interval);
+        window.removeEventListener("load", handleLoad);
         
         // Brief pause at 100% before reveal
         setTimeout(() => {
@@ -62,6 +78,7 @@ export function Preloader({ onComplete }: PreloaderProps) {
     return () => {
       clearInterval(interval);
       clearInterval(logInterval);
+      window.removeEventListener("load", handleLoad);
     };
   }, [onComplete]);
 

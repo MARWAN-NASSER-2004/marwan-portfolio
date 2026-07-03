@@ -115,7 +115,7 @@ export function useScrollSequence() {
 
       // Calculate Warp Progress (from 210vh to 410vh)
       const warpStart = vh * 2.1;
-      const warpEnd = vh * 4.1;
+      const warpEnd = vh * 3.1;
       if (scrollTop > warpStart) {
         targetWarpProgress = Math.min(1, (scrollTop - warpStart) / (warpEnd - warpStart));
       } else {
@@ -180,7 +180,7 @@ export function useScrollSequence() {
 
       // Projects Section Approach
       const vh = window.innerHeight;
-      const warpEnd = vh * 4.1;
+      const warpEnd = vh * 3.1;
       const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
       
       if (currentWarpProgress > 0 && currentWarpProgress < 0.999) {
@@ -280,7 +280,7 @@ export function useScrollSequence() {
     const handleWheel = (e: WheelEvent) => {
       const vh = window.innerHeight;
       const warpStart = vh * 2.1;
-      const warpEnd = vh * 4.1;
+      const warpEnd = vh * 3.1;
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       
       if (e.deltaY > 0 && scrollTop >= warpStart - 10 && scrollTop < warpEnd - 10) {
@@ -305,7 +305,7 @@ export function useScrollSequence() {
       }
       const vh = window.innerHeight;
       const warpStart = vh * 2.1;
-      const warpEnd = vh * 4.1;
+      const warpEnd = vh * 3.1;
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartY - touchY; // Positive = scrolling down

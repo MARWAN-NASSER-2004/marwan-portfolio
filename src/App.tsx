@@ -129,16 +129,16 @@ export default function App() {
       </div>
 
       {/* 3D Scene Spacer (Provides the scrollable area for the 3D sequence) */}
-      {/* 30vh (hero->architect) + 100vh (architect) + 80vh (vision) + 200vh (warp zone) = 410vh */}
-      <div className="relative w-full h-[410vh] pointer-events-none z-0">
+      {/* 30vh (hero->architect) + 100vh (architect) + 80vh (vision) + 100vh (warp zone) = 310vh */}
+      <div className="relative w-full h-[310vh] pointer-events-none z-0">
         {/* Scroll Snap Points for the 3D Scene */}
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="h-[30vh] w-full snap-start snap-always" />
           <div className="h-[100vh] w-full snap-start snap-always" />
           <div className="h-[80vh] w-full snap-start snap-always" />
-          {/* Skills section snap point (starts at 210vh, ends at 410vh) */}
-          <div className="h-[200vh] w-full snap-start snap-always" />
-          {/* Snap point for the Projects Section start (at exactly 410vh) */}
+          {/* Skills section snap point (starts at 210vh, ends at 310vh) */}
+          <div className="h-[100vh] w-full snap-start snap-always" />
+          {/* Snap point for the Projects Section start (at exactly 310vh) */}
           <div className="h-0 w-full snap-start snap-always" />
         </div>
       </div>

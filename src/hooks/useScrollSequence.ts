@@ -13,7 +13,7 @@ export function useScrollSequence() {
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    const frameCount = 600;
+    const frameCount = 300;
     const currentFrame = (index: number) =>
       `/frames/frame_${String(index).padStart(3, "0")}.jpg`;
 

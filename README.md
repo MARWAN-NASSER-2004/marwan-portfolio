@@ -1,19 +1,63 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Marwan's Portfolio 🚀
 
-# Run and deploy your AI Studio app
+Welcome to my personal portfolio repository! This is a modern, interactive, and highly optimized frontend web application designed to showcase my skills, projects, and professional vision.
 
-This contains everything you need to run your app locally.
-https://ai.studio/apps/037dac25-5660-49c2-a7c5-7340b9845818
+## ✨ Features
 
-## Run Locally
+- **Immersive 3D Experience**: Cinematic scroll-driven animations using CSS transforms and Framer Motion.
+- **Cyberpunk / Sci-Fi Aesthetic**: Dark mode by default with vibrant neon accents and glassmorphism UI elements.
+- **Dynamic Layer Stacking**: Project cards beautifully overlay each other on scroll using custom sticky CSS logic.
+- **Fully Responsive**: Flawless experience across all device sizes (Desktop, Tablet, Mobile).
+- **Arabic Language Support**: Complete bilingual support (English/Arabic) with seamless RTL layout switching.
+- **Performance Optimized**: Built with Vite and React for lightning-fast HMR and small production bundles.
 
-**Prerequisites:**  Node.js
+## 🛠️ Tech Stack
 
+- **Framework**: [React 18](https://react.dev/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [React Icons](https://react-icons.github.io/react-icons/)
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 🚀 Getting Started
+
+Follow these instructions to run the portfolio locally on your machine.
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/YourUsername/marwan-portfolio.git
+   cd marwan-portfolio
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+## 🌐 Hosting
+
+This project is fully static and can be easily hosted on any static hosting provider such as:
+- **Vercel** (Recommended)
+- **Netlify**
+- **GitHub Pages**
+
+Simply connect your repository to the hosting provider and use `npm run build` as the build command.
+
+---
+
+*Designed and engineered with passion.*

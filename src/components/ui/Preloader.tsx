@@ -30,32 +30,26 @@ export function Preloader({ onComplete }: PreloaderProps) {
   }, []);
 
   useEffect(() => {
-    const startTime = Date.now();
-    const MIN_DURATION = 2500; // Keep the cool boot sequence for at least 2.5s
+    let loadedCount = 0;
+    const totalFrames = 300;
+    let isCompleted = false;
     
-    let isLoaded = document.readyState === "complete";
-    const handleLoad = () => { isLoaded = true; };
+    let isWindowLoaded = document.readyState === "complete";
+    const handleLoad = () => { 
+      isWindowLoaded = true; 
+      checkComplete();
+    };
     
-    if (!isLoaded) {
+    if (!isWindowLoaded) {
       window.addEventListener("load", handleLoad);
     }
-    
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      
-      // Fake progress creeps up to 95% over the minimum duration
-      let currentProgress = Math.min(95, (elapsed / MIN_DURATION) * 95);
-      
-      // If the actual page and all images are fully loaded, and min duration has passed, jump to 100%
-      if (isLoaded && elapsed >= MIN_DURATION) {
-        currentProgress = 100;
-      }
-      
-      setProgress(Math.floor(currentProgress));
-      
-      if (currentProgress === 100) {
-        clearInterval(interval);
-        window.removeEventListener("load", handleLoad);
+
+    const checkComplete = () => {
+      if (isCompleted) return;
+      // We require ALL 300 frames to load + the main window load event
+      if (loadedCount >= totalFrames && isWindowLoaded) {
+        isCompleted = true;
+        setProgress(100);
         
         // Brief pause at 100% before reveal
         setTimeout(() => {
@@ -64,7 +58,27 @@ export function Preloader({ onComplete }: PreloaderProps) {
           setTimeout(onComplete, 1200); 
         }, 400);
       }
-    }, 30);
+    };
+
+    // Preload all 300 frames to make the progress bar REAL
+    for (let i = 1; i <= totalFrames; i++) {
+      const img = new Image();
+      // Ensure we hit the same cache URL as useScrollSequence
+      img.src = `/frames/frame_${String(i).padStart(3, "0")}.jpg`;
+      
+      const onImageLoadOrError = () => {
+        loadedCount++;
+        if (!isCompleted) {
+          // Cap at 99% until window is fully loaded
+          const percentage = Math.floor((loadedCount / totalFrames) * 99);
+          setProgress(prev => Math.max(prev, percentage));
+        }
+        checkComplete();
+      };
+
+      img.onload = onImageLoadOrError;
+      img.onerror = onImageLoadOrError;
+    }
 
     // Terminal Logs Simulation
     let logIndex = 0;
@@ -76,7 +90,6 @@ export function Preloader({ onComplete }: PreloaderProps) {
     }, 300);
 
     return () => {
-      clearInterval(interval);
       clearInterval(logInterval);
       window.removeEventListener("load", handleLoad);
     };

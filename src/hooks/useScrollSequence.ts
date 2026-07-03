@@ -20,9 +20,9 @@ export function useScrollSequence() {
     const imageCache: Record<number, HTMLImageElement> = {};
     const imagePromises: Record<number, Promise<HTMLImageElement>> = {};
 
-    const loadImage = (index: number): Promise<HTMLImageElement> => {
+    const loadImage = async (index: number): Promise<HTMLImageElement> => {
       if (imageCache[index]) return Promise.resolve(imageCache[index]);
-      if (imagePromises[index]) return imagePromises[index];
+      if (await imagePromises[index]) return imagePromises[index];
 
       const promise = new Promise<HTMLImageElement>((resolve) => {
         const img = new Image();

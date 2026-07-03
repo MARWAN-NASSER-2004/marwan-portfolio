@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, Variants } from "framer-motion";
 
 interface Project {
   id: string;
@@ -19,7 +19,7 @@ interface DecryptedProjectCardProps {
   index: number;
 }
 
-const sentenceVariants = {
+const sentenceVariants: Variants = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
@@ -30,12 +30,12 @@ const sentenceVariants = {
   },
 };
 
-const letterVariants = {
+const letterVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
 };
 
-const fadeUpVariants = {
+const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };

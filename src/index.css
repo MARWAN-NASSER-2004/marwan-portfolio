@@ -11,8 +11,6 @@
   --color-app-fg: #f8fafc;
   --color-app-muted: #94a3b8;
   --color-app-accent: #c481ff;
-  --color-app-hud: #33FF00;
-  --color-app-scanline: rgba(51, 255, 0, 0.03);
   --color-app-success: #10b981;
 }
 
@@ -97,4 +95,9 @@
     animation-delay: 100ms;
   }
   .delay-300 {
-    a
+    animation-delay: 300ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+}

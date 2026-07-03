@@ -16,6 +16,7 @@ interface DecryptedProjectCardProps {
   imageLeft: boolean;
   t: any;
   isAr: boolean;
+  index: number;
 }
 
 const sentenceVariants = {
@@ -44,11 +45,18 @@ export function DecryptedProjectCard({
   imageLeft,
   t,
   isAr,
+  index,
 }: DecryptedProjectCardProps) {
   return (
-    <div className={`w-full min-h-screen snap-start snap-always flex flex-col ${imageLeft ? "lg:flex-row" : "lg:flex-row-reverse"} items-center justify-between gap-8 lg:gap-16 py-24 md:py-32 group`}>
+    <>
+      {/* Ghost snap point with 1px height to ensure browser scroll-snap engine detects it, but -mb-[1px] so it doesn't affect layout */}
+      <div className="w-full h-[1px] -mb-[1px] snap-start snap-always shrink-0" aria-hidden="true" />
       
-      {/* IMAGE / SCAN EFFECT */}
+      <div
+        className={`sticky top-0 w-full min-h-screen flex flex-col ${imageLeft ? "lg:flex-row" : "lg:flex-row-reverse"} items-center justify-between gap-8 lg:gap-16 py-24 md:py-32 group bg-[#050505] border-t border-app-accent/20`}
+        style={{ zIndex: 10 + index }}
+      >
+        {/* IMAGE / SCAN EFFECT */}
       <div className="w-full lg:w-1/2 relative rounded-2xl overflow-hidden border border-white/10 bg-app-card/60 aspect-video shadow-2xl">
         {/* Label above image */}
         <div className="absolute top-0 left-0 w-full bg-black/80 backdrop-blur-md px-4 py-2 border-b border-white/10 z-20 flex items-center justify-between">
@@ -102,7 +110,9 @@ export function DecryptedProjectCard({
           className="flex flex-col gap-4"
         >
           {/* Title */}
-          <h3 className={`text-4xl md:text-5xl font-extrabold text-white tracking-wide uppercase drop-shadow-lg ${isAr ? "font-arabic" : "font-sans"}`}>
+          <h3
+            className={`text-4xl md:text-5xl font-extrabold text-white tracking-wide uppercase drop-shadow-lg ${isAr ? "font-arabic" : "font-sans"}`}
+          >
             {project.title.split("").map((char, i) => (
               <motion.span key={`${char}-${i}`} variants={letterVariants}>
                 {char}
@@ -149,10 +159,13 @@ export function DecryptedProjectCard({
           transition={{ delay: 4.2 }}
           className="mt-6 inline-flex items-center gap-3 px-6 py-3 border border-app-accent/50 text-white font-mono text-xs uppercase tracking-[0.2em] hover:bg-app-accent/20 hover:border-app-accent transition-all duration-300 relative overflow-hidden group"
         >
-          <span className="relative z-10">{t.projectsAccessBtn || "ACCESS_FILE →"}</span>
+          <span className="relative z-10">
+            {t.projectsAccessBtn || "ACCESS_FILE →"}
+          </span>
           <div className="absolute inset-0 bg-app-accent/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
         </motion.a>
       </div>
     </div>
+    </>
   );
 }

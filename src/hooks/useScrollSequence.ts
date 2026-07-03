@@ -18,13 +18,13 @@ export function useScrollSequence() {
       `/frames/frame_${String(index).padStart(3, "0")}.jpg`;
 
     const imageCache: Record<number, HTMLImageElement> = {};
+    const imagePromises: Record<number, Promise<HTMLImageElement>> = {};
 
     const loadImage = (index: number): Promise<HTMLImageElement> => {
-      return new Promise((resolve) => {
-        if (imageCache[index]) {
-          resolve(imageCache[index]);
-          return;
-        }
+      if (imageCache[index]) return Promise.resolve(imageCache[index]);
+      if (imagePromises[index]) return imagePromises[index];
+
+      const promise = new Promise<HTMLImageElement>((resolve) => {
         const img = new Image();
         img.src = currentFrame(index);
         img.onload = () => {
@@ -32,6 +32,8 @@ export function useScrollSequence() {
           resolve(img);
         };
       });
+      imagePromises[index] = promise;
+      return promise;
     };
 
     // Smart Background Preload (Sliding Window)
@@ -40,11 +42,11 @@ export function useScrollSequence() {
     let animationFrameId: number;
     let lastDrawnFrame = 0;
 
-    const PRELOAD_AHEAD = 20;
-    const PRELOAD_BEHIND = 10;
+    const PRELOAD_AHEAD = 80; // Fetch much further ahead for production
+    const PRELOAD_BEHIND = 20;
     let isPreloading = false;
 
-    const performSmartPreload = async () => {
+    const performSmartPreload = () => {
       if (isPreloading) return;
       isPreloading = true;
 
@@ -52,10 +54,9 @@ export function useScrollSequence() {
       const start = Math.max(1, current - PRELOAD_BEHIND);
       const end = Math.min(frameCount, current + PRELOAD_AHEAD);
 
+      // Fire in parallel without await (HTTP/2 multiplexing)
       for (let i = start; i <= end; i++) {
-        if (!imageCache[i]) {
-          await loadImage(i);
-        }
+        loadImage(i);
       }
       isPreloading = false;
     };
@@ -122,6 +123,9 @@ export function useScrollSequence() {
       }
     };
 
+    let requestCounter = 0;
+    let latestDrawnRequest = 0;
+
     const renderLoop = () => {
       // Lerp (linear interpolate) the current frame towards the target frame
       currentRenderedFrame += (targetFrameIndex - currentRenderedFrame) * 0.04;
@@ -135,8 +139,14 @@ export function useScrollSequence() {
         frameToDraw <= frameCount
       ) {
         lastDrawnFrame = frameToDraw;
+        
+        const myRequest = ++requestCounter;
         loadImage(frameToDraw).then((img) => {
-          context.drawImage(img, 0, 0);
+          // Prevent out-of-order frames from drawing over newer frames
+          if (myRequest > latestDrawnRequest) {
+            latestDrawnRequest = myRequest;
+            context.drawImage(img, 0, 0);
+          }
         });
         
         // Trigger preload for the new window
